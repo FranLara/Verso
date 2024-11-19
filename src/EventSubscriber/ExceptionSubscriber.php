@@ -12,13 +12,14 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
+    public const string WRONG_REQUEST = 'Wrong URL. Please check it to be sure the params are correctly introduced.';
+
     public function onKernelException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
 
         if ($exception instanceof NotFoundHttpException) {
-            $response = new Response('Wrong URL. Please check it to be sure the parameters are correctly introduced.',
-                Response::HTTP_NOT_FOUND);
+            $response = new Response(self::WRONG_REQUEST, Response::HTTP_NOT_FOUND);
             $event->setResponse($response);
         }
     }
