@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+if [ $# -gt 0 ]; then
+
+    if [[ "$1" == "start" ]]; then
+        docker compose up -d
+
+    elif [[ "$1" == "stop" ]]; then
+        docker compose down
+
+    elif [[ "$1" == "build" ]]; then
+        php composer.phar install --optimize-autoloader --no-dev --no-interaction --no-progress --ansi
+        docker compose up -d --build
+
+    elif [[ "$1" == "rebuild-mac" ]]; then
+        cd infrastructure/nginx/certs/
+        rm verso.key
+        rm verso.crt
+        openssl genrsa -out verso.key 2048
+        openssl req -new -key verso.key -out verso.csr -config verso.conf
+        openssl x509 -req -days 365 -in verso.csr -signkey verso.key -out verso.crt
+        cd ../../..
+        php composer.phar install --optimize-autoloader --no-dev --no-interaction --no-progress --ansi
+        docker compose up -d --build
+        cd infrastructure/nginx/certs/
+        rm verso.csr
+
+    elif [[ "$1" == "composer" ]]; then
+        shift 1
+        docker compose exec verso.test composer "$@"
+
+    elif [[ "$1" == "console" ]]; then
+        shift 1
+        docker compose exec verso.test php bin/console "$@"
+
+     elif [[ "$1" == "challenge" ]]; then
+        shift 1
+        docker compose exec verso.test php bin/console verso:challengeTest "$@"
+
+    fi
+
+else
+    docker compose ps
+fi

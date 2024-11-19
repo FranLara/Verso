@@ -1,0 +1,9 @@
+{% extends 'test/layout.html.twig' %}
+
+{% block page_contents %}
+    <h2>Output</h2>
+
+    {% for value in output %}
+        {{ value }}<br/>
+    {% endfor %}
+{% endblock %}

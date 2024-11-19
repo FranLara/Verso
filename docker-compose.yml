@@ -1,0 +1,25 @@
+services:
+    verso.test:
+        build:
+            context: ./
+            dockerfile: Dockerfile.dev
+        image: verso/test:latest
+        networks:
+            - versonet
+        domainname: verso.test
+        ports:
+            - ${APP_PORT:-80}:8080
+            - ${APP_PORT_SECURE:-443}:8443
+        environment:
+            SSL_MODE: ${SSL_MODE}
+            SSL_PRIVATE_KEY_FILE: "/etc/ssl/private/verso.key"
+            SSL_CERTIFICATE_FILE: "/etc/ssl/private/verso.crt"
+        volumes:
+            - ./:/var/www/html:cached
+networks:
+    versonet:
+        driver: bridge
+
+volumes:
+    db-data:
+        driver: local

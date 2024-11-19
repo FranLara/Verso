@@ -1,0 +1,12 @@
+FROM serversideup/php:8.3-fpm-nginx-alpine
+
+USER root
+
+RUN install-php-extensions xdebug
+
+USER www-data
+
+COPY --chown=www-data ./infrastructure/nginx/certs/verso.crt /etc/ssl/private/verso.crt
+COPY --chown=www-data ./infrastructure/nginx/certs/verso.key /etc/ssl/private/verso.key
+
+COPY --chown=www-data . .

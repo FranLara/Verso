@@ -1,0 +1,23 @@
+web_test:
+    path: /{amount}/{fizzValue}/{buzzValue}
+    controller: App\Controller\WebController::test
+    defaults:
+        amount: 100
+        fizzValue: 3
+        buzzValue: 5
+    requirements:
+        amount: '\d+'
+        fizzValue: '\d+'
+        buzzValue: '\d+'
+
+api_test:
+    path: /api/{amount}/{fizzValue}/{buzzValue}
+    controller: App\Controller\ApiController::test
+    defaults:
+        amount: 100
+        fizzValue: 3
+        buzzValue: 5
+    requirements:
+        amount: '\d+'
+        fizzValue: '\d+'
+        buzzValue: '\d+'
