@@ -1,0 +1,33 @@
+name: Install Environment
+run-name: ${{github.actor}} prepare the environment to test the ${{github.event_name}} of the branch ${{github.ref_name}}
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      branch:
+        type: string
+        required: true
+        description: Branch name
+
+jobs:
+  install-environment:
+    name: Environment Installation
+    runs-on: ubuntu-latest
+    container: shinsenter/symfony
+    steps:
+      - name: Checkout to prepare environment
+        uses: actions/checkout@v4
+
+      - name: Archive ENV file
+        uses: actions/upload-artifact@v4
+        with:
+          retention-days: 1
+          overwrite: true
+          include-hidden-files: true
+          name: default-environment-${{vars.PROJECT}}-${{inputs.branch}}
+          path: .env
