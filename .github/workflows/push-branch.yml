@@ -3,6 +3,10 @@ run-name: ${{github.actor}} made a ${{github.event_name}} for the branch ${{gith
 
 on: [ workflow_dispatch,push ]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build-image:
     name: Docker Image Creation
